@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp8
+namespace COCTown_Project
 {
     internal class Program
     {

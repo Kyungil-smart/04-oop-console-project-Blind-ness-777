@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\bin",
+    "\\GameObjects",
+    "\\Managers",
+    "\\Scenes",
+    "\\Utils"
+  ],
+  "SelectedNode": "\\Utils\\Tile.cs",
+  "PreviewInSolutionExplorer": false
+}
