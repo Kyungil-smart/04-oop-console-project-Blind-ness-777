@@ -7,20 +7,8 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Scenes\\TownScene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Managers\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\TitleScene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Scenes\\TitleScene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\HotKeyBar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Utils\\HotKeyBar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:GameObjects\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\PlayerCharacter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,12 +19,28 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Utils\\Inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Managers\\InputManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\Scene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Scenes\\Scene.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Managers\\InputManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Managers\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\HotKeyBar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Utils\\HotKeyBar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:GameObjects\\Item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\SceneManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -45,10 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\MenuList.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Utils\\MenuList.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\ObservableProperty.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -74,24 +74,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "InputManager.cs",
-              "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs",
-              "RelativeDocumentMoniker": "Managers\\InputManager.cs",
-              "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs",
-              "RelativeToolTip": "Managers\\InputManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T23:25:52.948Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "SceneManager.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\SceneManager.cs",
               "RelativeDocumentMoniker": "Managers\\SceneManager.cs",
@@ -99,12 +86,11 @@
               "RelativeToolTip": "Managers\\SceneManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T23:10:03.696Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T23:10:03.696Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\GameManager.cs",
               "RelativeDocumentMoniker": "Managers\\GameManager.cs",
@@ -112,25 +98,24 @@
               "RelativeToolTip": "Managers\\GameManager.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T23:02:04.523Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T23:02:04.523Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "Inventory.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\Inventory.cs",
               "RelativeDocumentMoniker": "Utils\\Inventory.cs",
               "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\Inventory.cs",
               "RelativeToolTip": "Utils\\Inventory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAABAAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-08T22:51:44.351Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "Scene.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\Scene.cs",
               "RelativeDocumentMoniker": "Scenes\\Scene.cs",
@@ -138,8 +123,7 @@
               "RelativeToolTip": "Scenes\\Scene.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:51:28.047Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T22:51:28.047Z"
             },
             {
               "$type": "Document",
@@ -149,27 +133,27 @@
               "RelativeDocumentMoniker": "Scenes\\TownScene.cs",
               "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\TownScene.cs",
               "RelativeToolTip": "Scenes\\TownScene.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAAEcAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAGEAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-08T22:48:38.932Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "PlayerCharacter.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\PlayerCharacter.cs",
               "RelativeDocumentMoniker": "GameObjects\\PlayerCharacter.cs",
               "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\PlayerCharacter.cs",
               "RelativeToolTip": "GameObjects\\PlayerCharacter.cs",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-08T22:21:50.368Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "Item.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\GameObjects\\Item.cs",
               "RelativeDocumentMoniker": "GameObjects\\Item.cs",
@@ -177,12 +161,11 @@
               "RelativeToolTip": "GameObjects\\Item.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:16:00.485Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T22:16:00.485Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "HotKeyBar.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\HotKeyBar.cs",
               "RelativeDocumentMoniker": "Utils\\HotKeyBar.cs",
@@ -190,18 +173,17 @@
               "RelativeToolTip": "Utils\\HotKeyBar.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:09:47.187Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T22:09:47.187Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "TitleScene.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\TitleScene.cs",
               "RelativeDocumentMoniker": "Scenes\\TitleScene.cs",
               "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Scenes\\TitleScene.cs",
               "RelativeToolTip": "Scenes\\TitleScene.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAF8AAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-08T22:09:29.858Z",
               "EditorCaption": ""
@@ -240,12 +222,36 @@
               "RelativeToolTip": "Utils\\ObservableProperty.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:08:08.322Z",
+              "WhenOpened": "2026-01-08T22:08:08.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-08T22:04:05.106Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InputManager.cs",
+              "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs",
+              "RelativeDocumentMoniker": "Managers\\InputManager.cs",
+              "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Managers\\InputManager.cs",
+              "RelativeToolTip": "Managers\\InputManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-08T23:25:52.948Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "MenuList.cs",
               "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Utils\\MenuList.cs",
               "RelativeDocumentMoniker": "Utils\\MenuList.cs",
@@ -253,8 +259,7 @@
               "RelativeToolTip": "Utils\\MenuList.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:07:49.726Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-08T22:07:49.726Z"
             },
             {
               "$type": "Document",
@@ -267,19 +272,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-08T22:05:36.548Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\wlsgo\\Desktop\\COCTown_Project\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-08T22:04:05.106Z",
-              "EditorCaption": ""
             }
           ]
         }

@@ -12,8 +12,6 @@ public static class InputManager
         ConsoleKey.LeftArrow,
         ConsoleKey.RightArrow,
         ConsoleKey.Enter,
-        ConsoleKey.I,
-        ConsoleKey.Z,
         ConsoleKey.B,
     };
 

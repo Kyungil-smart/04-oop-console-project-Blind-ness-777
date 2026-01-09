@@ -3,6 +3,15 @@
 public class TitleScene : Scene
 {
     private MenuList _titleMenu;
+    private bool showMenu = false;
+
+    private const int BannerX = 6;
+    private const int BannerY = 2;
+    private const int BannerWidth = 68;
+    private const int BannerHeight = 18;
+
+    private int _titleCenterX;
+    private int _titleBottomY;
 
     public TitleScene()
     {
@@ -19,6 +28,7 @@ public class TitleScene : Scene
     }
     public override void Enter()
     {
+        showMenu = false;
         _titleMenu.Reset();
     }
 
@@ -31,6 +41,14 @@ public class TitleScene : Scene
 
     public override void Update()
     {
+        if (!showMenu)
+        {
+            if (InputManager.GetKey(ConsoleKey.Enter))
+                showMenu = true;
+
+            return;
+        }
+
         if (InputManager.GetKey(GameKeys.Up))
             _titleMenu.SelectUp();
 
@@ -43,18 +61,54 @@ public class TitleScene : Scene
 
     public override void Render()
     {
-        // 1) 배경(눈) - 나중에
-        // DrawEyeGlow();
+        Console.Clear();
+        DrawTitleBanner();
 
-        // 2) 타이틀
-        Console.SetCursorPosition(10, 5);
-        Console.Write("COC TOWN");
+        if (showMenu)
+        {
+            int menuBoxWidth = 30;
+            int menuBoxHeight = 8;
 
-        // 3) 메뉴 박스(외곽) - 네 맘대로 커스텀할 자리
-        DrawBox(8, 7, 30, 8);
+            int menuX = _titleCenterX - (menuBoxWidth / 2);
+            int menuY = _titleBottomY + 3;
 
-        // 4) 메뉴 텍스트(세로 메뉴)
-        _titleMenu.Render(10, 8);
+            int minX = BannerX + 2;
+            int maxX = BannerX + BannerWidth - menuBoxWidth - 2;
+            if (menuX < minX) menuX = minX;
+            if (menuX > maxX) menuX = maxX;
+
+            int minY = BannerY + 2;
+            int maxY = BannerY + BannerHeight - menuBoxHeight - 2;
+            if (menuY < minY) menuY = minY;
+            if (menuY > maxY) menuY = maxY;
+
+            DrawBox(menuX, menuY, menuBoxWidth, menuBoxHeight);
+            _titleMenu.Render(menuX + 2, menuY + 1);
+        }
+
+    }
+
+    private void DrawTitleBanner()
+    {
+        DrawBox(BannerX, BannerY, BannerWidth, BannerHeight);
+
+        string title = "C O C   T O W N";
+        int titleX = BannerX + (BannerWidth - title.Length) / 2;
+        int titleY = BannerY + 2;
+
+        Console.SetCursorPosition(titleX, titleY);
+        Console.Write(title);
+
+        _titleCenterX = titleX + (title.Length / 2);
+
+        _titleBottomY = titleY + 3;
+
+        string tagline = "YOU SHOULD NOT HAVE COME HERE";
+        int tagX = BannerX + (BannerWidth - tagline.Length) / 2;
+        int tagY = BannerY + 4;
+
+        Console.SetCursorPosition(tagX, tagY);
+        Console.Write(tagline);
     }
 
     public override void Exit() { }
@@ -86,20 +140,34 @@ public class TitleScene : Scene
     public void ViewControls()
     {
         Console.Clear();
-        Console.WriteLine("=== 조작법 ===");
-        Console.WriteLine("방향키: 이동");
-        Console.WriteLine("Enter: 선택/다음");
-        Console.WriteLine("I: 인벤토리");
-        Console.WriteLine();
-        Console.WriteLine("[Enter] 돌아가기");
 
-        // Enter가 눌릴 때까지 대기
-        while (true)
+        string[] lines =
         {
-            ConsoleKey key = Console.ReadKey(true).Key;
-            if (key == ConsoleKey.Enter)
-                break;
+            "┌──────────────────────────────┐",
+            "│          조 작 법           │",
+            "│                              │",
+            "│   ↑ ↓ ← → : 이동             │",
+            "│   Enter  : 상호작용 / 선택   │",
+            "│   B      : 소지품(인벤)      │",
+            "│                              │",
+            "│   [ Enter ] 돌아가기         │",
+            "└──────────────────────────────┘"
+        };
+
+        int boxWidth = lines[0].Length;
+        int boxHeight = lines.Length;
+
+        int startX = (Console.WindowWidth - boxWidth) / 2;
+        int startY = (Console.WindowHeight - boxHeight) / 2;
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            Console.SetCursorPosition(startX, startY + i);
+            Console.Write(lines[i]);
         }
+
+        // Enter 대기
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
     }
 
     public void GameQuit()

@@ -32,19 +32,65 @@ public class TownScene : Scene
 
     public override void Update()
     {
-        _player.Update();
+        if (HandleInventoryKey())
+            return;
 
-        if (InputManager.GetKey(ConsoleKey.Z))
+        HandleMoveKeys();
+        HandleInteractKey();
+    }
+
+    private bool HandleInventoryKey()
+    {
+        if (InputManager.GetKey(ConsoleKey.B))
         {
-            _player.DecreaseSanity(1);
-
-            if (_player.IsDead())
-            {
-                GameOver();
-                // 지금 구조에 맞는 종료/전환 방식으로 바꾸기
-                // 예: GameManager.ChangeScene(new TitleScene()); 또는 GameManager.Quit()
-            }
+            _player.Inventory.ShowInventoryScreen();
+            Console.Clear();
+            return true;
         }
+        return false;
+    }
+
+    private void HandleMoveKeys()
+    {
+        if (InputManager.GetKey(ConsoleKey.UpArrow))
+        {
+            TryMove(0, -1);
+            return;
+        }
+
+        if (InputManager.GetKey(ConsoleKey.DownArrow))
+        {
+            TryMove(0, 1);
+            return;
+        }
+
+        if (InputManager.GetKey(ConsoleKey.LeftArrow))
+        {
+            TryMove(-1, 0);
+            return;
+        }
+
+        if (InputManager.GetKey(ConsoleKey.RightArrow))
+        {
+            TryMove(1, 0);
+            return;
+        }
+    }
+
+    private void HandleInteractKey()
+    {
+        if (!InputManager.GetKey(ConsoleKey.Enter))
+            return;
+
+        InteractAtPlayerPosition();
+    }
+
+    private void TryMove(int deltaX, int deltaY)
+    {
+    }
+
+    private void InteractAtPlayerPosition()
+    {
     }
 
     public override void Render()
