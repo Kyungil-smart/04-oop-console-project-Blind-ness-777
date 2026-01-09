@@ -1,6 +1,8 @@
-﻿public class PlayerCharacter : GameObject
+﻿using System;
+
+public class PlayerCharacter : GameObject
 {
-    public ObservableProperty<int> Health = new ObservableProperty<int>(100);
+    public ObservableProperty<int> Sanity = new ObservableProperty<int>(5);
 
     public Tile[,] Field { get; set; }
     private Inventory _inventory = new Inventory();
@@ -15,8 +17,8 @@
     public void Init()
     {
         Symbol = 'P';
-        Health.AddListener(SetHealthGauge);
-        _healthGauge = "■■■■■";
+        Sanity.AddListener(SetSanityGauge);
+        _sanityGauge = "●●●●●";
     }
 
     public void Update()
@@ -72,33 +74,68 @@
         _inventory.TryAdd(item);
     }
 
-    private string _healthGauge;
+    private string _sanityGauge;
 
-    public void DrawHealthGauge()
+    public void DrawSanityGauge()
     {
-        Console.SetCursorPosition(Position.X - 2, Position.Y - 1);
-        _healthGauge.Print(ConsoleColor.Red);
+        Console.SetCursorPosition(0, 0);
+        "정신력 : ".Print();
+        _sanityGauge.Print(ConsoleColor.Cyan);
+        Console.Write("   ");
     }
 
-    public void SetHealthGauge(int health)
+    public void SetSanityGauge(int sanity)
     {
-        switch (health)
+        switch (sanity)
         {
             case 5:
-                _healthGauge = "■■■■■";
+                _sanityGauge = "●●●●●";
                 break;
             case 4:
-                _healthGauge = "■■■■□";
+                _sanityGauge = "●●●●○";
                 break;
             case 3:
-                _healthGauge = "■■■□□";
+                _sanityGauge = "●●●○○";
                 break;
             case 2:
-                _healthGauge = "■■□□□";
+                _sanityGauge = "●●○○○";
                 break;
             case 1:
-                _healthGauge = "■□□□□";
+                _sanityGauge = "●○○○○";
+                break;
+            case 0:
+                _sanityGauge = "○○○○○";
+                break;
+            default:
+                if (sanity > 5) _sanityGauge = "●●●●●";
+                else _sanityGauge = "○○○○○";
                 break;
         }
     }
+
+    public void DecreaseSanity(int amount)
+    {
+        if (amount <= 0) return;
+
+        int next = Sanity.Value - amount;
+        if (next < 0) next = 0;
+
+        Sanity.Value = next;
+    }
+
+    public void IncreaseSanity(int amount)
+    {
+        if (amount <= 0) return;
+
+        int next = Sanity.Value + amount;
+        if (next > 5) next = 5;
+
+        Sanity.Value = next;
+    }
+
+    public bool IsDead()
+    {
+        return Sanity.Value <= 0;
+    }
+
 }

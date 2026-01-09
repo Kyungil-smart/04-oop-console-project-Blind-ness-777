@@ -1,4 +1,6 @@
-﻿public class TownScene : Scene
+﻿using System;
+
+public class TownScene : Scene
 {
     private Tile[,] _field = new Tile[10, 20];
     private PlayerCharacter _player;
@@ -31,20 +33,45 @@
     public override void Update()
     {
         _player.Update();
+
+        if (InputManager.GetKey(ConsoleKey.Z))
+        {
+            _player.DecreaseSanity(1);
+
+            if (_player.IsDead())
+            {
+                GameOver();
+                // 지금 구조에 맞는 종료/전환 방식으로 바꾸기
+                // 예: GameManager.ChangeScene(new TitleScene()); 또는 GameManager.Quit()
+            }
+        }
     }
 
     public override void Render()
     {
+        Console.SetCursorPosition(0, 0);
         PrintField();
 
         int hotkeyY = Console.WindowHeight - 2;
         _hotKeyBar.Render(0, hotkeyY);
+
+        _player.DrawSanityGauge();
     }
 
     public override void Exit()
     {
         _field[_player.Position.Y, _player.Position.X].OnTileObject = null;
         _player.Field = null;
+    }
+
+    private void GameOver()
+    {
+        Console.Clear();
+        Console.SetCursorPosition(0, 0);
+        Console.WriteLine("정신력이 0이 되었다. 사망!");
+        Console.WriteLine("아무 키나 누르면 종료합니다...");
+        Console.ReadKey(true);
+        Environment.Exit(0);
     }
 
     private void PrintField()

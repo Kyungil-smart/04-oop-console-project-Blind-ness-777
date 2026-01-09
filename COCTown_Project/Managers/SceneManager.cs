@@ -1,4 +1,7 @@
-﻿public static class SceneManager
+﻿using System;
+using System.Collections.Generic;
+
+public static class SceneManager
 {
     public static Action OnChangeScene;
 

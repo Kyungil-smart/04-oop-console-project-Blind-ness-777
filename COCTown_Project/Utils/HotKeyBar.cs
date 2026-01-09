@@ -1,10 +1,10 @@
 ﻿using System;
 
-public class HotkeyBar
+public class HotKeyBar
 {
     private Inventory _inventory;
 
-    public HotkeyBar(Inventory inventory)
+    public HotKeyBar(Inventory inventory)
     {
         _inventory = inventory;
     }

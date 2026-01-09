@@ -1,3 +1,5 @@
+using System;
+
 public class Inventory
 {
     private const int SlotCount = 6;
@@ -31,7 +33,7 @@ public class Inventory
         _itemSlots[slotIndex] = null;
     }
 
-    public void UseAt(int slotIndex)
+    public bool UseAt(int slotIndex)
     {
         if (!IsValidIndex(slotIndex)) return false;
 
