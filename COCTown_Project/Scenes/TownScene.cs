@@ -11,6 +11,7 @@ public class TownScene : Scene
     public void Init(PlayerCharacter player)
     {
         _player = player;
+        _player.Inventory.Owner = _player;
         _hotKeyBar = new HotKeyBar(_player.Inventory);
 
         for (int y = 0; y < _field.GetLength(0); y++)
@@ -21,6 +22,12 @@ public class TownScene : Scene
                 _field[y, x] = new Tile(pos);
             }
         }
+
+        _field[3, 5].ItemOnTile = new Drink(10, "수상한 탄산음료", "마시면 머리가 맑아지는 느낌이다.", 2);
+        _field[2, 3].ItemOnTile = new HolyWater(20, "성수", "한 번, 광기의 손을 떼어낸다.");
+        _field[2, 4].ItemOnTile = new Cross(21, "십자가", "한 번, 죽음을 되돌린다.");
+
+
     }
 
     public override void Enter()
@@ -87,10 +94,56 @@ public class TownScene : Scene
 
     private void TryMove(int deltaX, int deltaY)
     {
+        int newX = _player.Position.X + deltaX;
+        int newY = _player.Position.Y + deltaY;
+
+        // 맵 범위 체크
+        if (newX < 0 || newX >= _field.GetLength(1)) return;
+        if (newY < 0 || newY >= _field.GetLength(0)) return;
+
+        // 현재 타일 비우기
+        _field[_player.Position.Y, _player.Position.X].OnTileObject = null;
+
+        // 위치 이동
+        _player.Position = new Vector(newX, newY);
+
+        // 새 타일에 플레이어 배치
+        _field[newY, newX].OnTileObject = _player;
     }
 
     private void InteractAtPlayerPosition()
     {
+        Vector pos = _player.Position;
+        Tile tile = _field[pos.Y, pos.X];
+
+        if (tile.ItemOnTile != null)
+        {
+            Item found = tile.ItemOnTile;
+
+            bool added = _player.Inventory.TryAdd(found);
+            if (added)
+            {
+                tile.ItemOnTile = null;
+
+                Console.Clear();
+                Console.WriteLine("아이템을 획득했다: " + found.ToString());
+                Console.WriteLine("[Enter] 계속");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("가방이 가득 찼다.");
+                Console.WriteLine("[Enter] 계속");
+                Console.ReadLine();
+            }
+            return;
+        }
+
+        Console.Clear();
+        Console.WriteLine("아무것도 없다...");
+        Console.WriteLine("[Enter] 계속");
+        Console.ReadLine();
     }
 
     public override void Render()
