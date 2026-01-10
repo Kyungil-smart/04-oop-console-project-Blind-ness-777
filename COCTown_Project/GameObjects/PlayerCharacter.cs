@@ -16,7 +16,8 @@ public class PlayerCharacter : GameObject
 
     public void Init()
     {
-        Symbol = 'P';
+        // 플레이어 심볼(혼합 모드): ●
+        Symbol = '●';
         Sanity.AddListener(SetSanityGauge);
         _sanityGauge = "●●●●●";
     }

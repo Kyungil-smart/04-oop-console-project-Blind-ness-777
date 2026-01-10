@@ -1,0 +1,7 @@
+C:\Users\wlsgo\Desktop\COCTown_Project\obj\Release\COCTown_Project.csproj.AssemblyReference.cache
+C:\Users\wlsgo\Desktop\COCTown_Project\obj\Release\COCTown_Project.csproj.CoreCompileInputs.cache
+C:\Users\wlsgo\Desktop\COCTown_Project\bin\Release\COCTown_Project.exe.config
+C:\Users\wlsgo\Desktop\COCTown_Project\bin\Release\COCTown_Project.exe
+C:\Users\wlsgo\Desktop\COCTown_Project\bin\Release\COCTown_Project.pdb
+C:\Users\wlsgo\Desktop\COCTown_Project\obj\Release\COCTown_Project.exe
+C:\Users\wlsgo\Desktop\COCTown_Project\obj\Release\COCTown_Project.pdb
