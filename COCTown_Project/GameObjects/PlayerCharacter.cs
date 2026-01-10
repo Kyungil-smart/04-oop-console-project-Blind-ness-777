@@ -34,9 +34,6 @@ public class PlayerCharacter : GameObject
         if (InputManager.GetKey(ConsoleKey.DownArrow)) Move(Vector.Down);
         if (InputManager.GetKey(ConsoleKey.LeftArrow)) Move(Vector.Left);
         if (InputManager.GetKey(ConsoleKey.RightArrow)) Move(Vector.Right);
-
-        // 상호작용(Z)은 나중에 여기
-        // if (InputManager.GetKey(ConsoleKey.Z)) Interact();
     }
 
     private void HandleHotkeys()

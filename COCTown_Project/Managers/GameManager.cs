@@ -46,6 +46,15 @@ public class GameManager
         SceneManager.AddScene("Title", new TitleScene());
         SceneManager.AddScene("Story", new StoryScene());
         SceneManager.AddScene("Town", new TownScene(player));
+		SceneManager.AddScene("BrokenHouse", new BrokenHouseScene(player));
+		
+		// 실내(집/성당/회관) 씬들
+		SceneManager.AddScene("House1", new House1Scene(player));
+		SceneManager.AddScene("House2", new House2Scene(player));
+		SceneManager.AddScene("House3", new House3Scene(player));
+		SceneManager.AddScene("House4", new House4Scene(player));
+		SceneManager.AddScene("Church", new ChurchScene(player));
+		SceneManager.AddScene("TownHall", new TownHallScene(player));
 
         // 첫 씬 시작
         SceneManager.Change("Title");

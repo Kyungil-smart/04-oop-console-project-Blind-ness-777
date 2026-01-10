@@ -56,6 +56,7 @@ public static class RelicPlacementSystem
 
     private static void Shuffle(List<Vector> list)
     {
+        // 초보자용: 가장 단순한 Fisher–Yates 셔플
         for (int i = list.Count - 1; i > 0; i--)
         {
             int j = RandomProvider.Next(0, i + 1);

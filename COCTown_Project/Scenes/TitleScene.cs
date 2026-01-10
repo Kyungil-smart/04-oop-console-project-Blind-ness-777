@@ -64,11 +64,12 @@ public class TitleScene : Scene
         Console.Clear();
         DrawTitleBanner();
 
-        if(!showMenu)
+        // ✅ 로고 화면 안내문
+        if (!showMenu)
         {
             string msg = "계속하려면 [Enter]...";
             int msgX = BannerX + (BannerWidth - msg.Length) / 2;
-            int msgY = BannerY + BannerHeight - 2;   // 배너 안쪽 아래
+            int msgY = BannerY + BannerHeight - 2;
 
             Console.SetCursorPosition(msgX, msgY);
             Console.Write(msg);
@@ -110,6 +111,7 @@ public class TitleScene : Scene
         Console.Write(title);
 
         _titleCenterX = titleX + (title.Length / 2);
+
         _titleBottomY = titleY + 3;
 
         string tagline = "YOU SHOULD NOT HAVE COME HERE";
@@ -118,18 +120,6 @@ public class TitleScene : Scene
 
         Console.SetCursorPosition(tagX, tagY);
         Console.Write(tagline);
-    }
-
-    private void WaitForEnter()
-    {
-        string msg = "계속하려면 [Enter]...";
-        int msgX = BannerX + (BannerWidth - msg.Length) / 2;
-        int msgY = BannerY + BannerHeight + 1;
-
-        Console.SetCursorPosition(msgX, msgY);
-        Console.Write(msg);
-
-        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
     }
 
     public override void Exit() { }
@@ -170,8 +160,8 @@ public class TitleScene : Scene
             "│   ↑ ↓ ← → : 이동             │",
             "│   Enter  : 상호작용 / 선택   │",
             "│   B      : 소지품(인벤)      │",
-            "│   1~6    : 아이템 사용       │",
-            "│            넘버패드 가능     │",
+            "│   1~6    : 단축키 사용       │",
+            "│            (넘패드 가능)     │",
             "│                              │",
             "│                              │",
             "│   [ Enter ] 돌아가기         │",
