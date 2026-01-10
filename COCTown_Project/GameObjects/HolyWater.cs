@@ -7,6 +7,7 @@ public class HolyWater : Item
         Id = id;
         Name = name;
         Description = description;
+        Category = ItemCategory.Protection;
     }
 
     public override void Use()

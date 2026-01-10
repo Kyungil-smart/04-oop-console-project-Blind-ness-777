@@ -6,6 +6,9 @@ public class TownScene : Scene
     private PlayerCharacter _player;
     private HotKeyBar _hotKeyBar;
 
+    private TriggerService _triggerService;
+    private LocationType _locationType = LocationType.Town;
+
     public TownScene(PlayerCharacter player) => Init(player);
 
     public void Init(PlayerCharacter player)
@@ -13,6 +16,8 @@ public class TownScene : Scene
         _player = player;
         _player.Inventory.Owner = _player;
         _hotKeyBar = new HotKeyBar(_player.Inventory);
+
+        _triggerService = new TriggerService();
 
         for (int y = 0; y < _field.GetLength(0); y++)
         {
@@ -23,9 +28,11 @@ public class TownScene : Scene
             }
         }
 
+        // 테스트용: 바닥 아이템 + 루팅 포인트
         _field[3, 5].ItemOnTile = new Drink(10, "수상한 탄산음료", "마시면 머리가 맑아지는 느낌이다.", 2);
-        _field[2, 3].ItemOnTile = new HolyWater(20, "성수", "한 번, 광기의 손을 떼어낸다.");
-        _field[2, 4].ItemOnTile = new Cross(21, "십자가", "한 번, 죽음을 되돌린다.");
+        _field[2, 3].IsLootSpot = true;
+        _field[2, 4].IsLootSpot = true;
+        _field[5, 10].IsLootSpot = true;
 
 
     }
@@ -42,8 +49,69 @@ public class TownScene : Scene
         if (HandleInventoryKey())
             return;
 
+        // ✅ 인벤토리를 열지 않아도 1~6(또는 넘패드)로 아이템 사용 가능
+        if (HandleHotKeyUse())
+            return;
+
         HandleMoveKeys();
         HandleInteractKey();
+    }
+
+    private bool HandleHotKeyUse()
+    {
+        int slotIndex = -1;
+
+        // 숫자키 1~6
+        if (InputManager.GetKey(ConsoleKey.D1)) slotIndex = 0;
+        else if (InputManager.GetKey(ConsoleKey.D2)) slotIndex = 1;
+        else if (InputManager.GetKey(ConsoleKey.D3)) slotIndex = 2;
+        else if (InputManager.GetKey(ConsoleKey.D4)) slotIndex = 3;
+        else if (InputManager.GetKey(ConsoleKey.D5)) slotIndex = 4;
+        else if (InputManager.GetKey(ConsoleKey.D6)) slotIndex = 5;
+
+        // 넘패드 1~6
+        else if (InputManager.GetKey(ConsoleKey.NumPad1)) slotIndex = 0;
+        else if (InputManager.GetKey(ConsoleKey.NumPad2)) slotIndex = 1;
+        else if (InputManager.GetKey(ConsoleKey.NumPad3)) slotIndex = 2;
+        else if (InputManager.GetKey(ConsoleKey.NumPad4)) slotIndex = 3;
+        else if (InputManager.GetKey(ConsoleKey.NumPad5)) slotIndex = 4;
+        else if (InputManager.GetKey(ConsoleKey.NumPad6)) slotIndex = 5;
+
+        if (slotIndex == -1)
+            return false;
+
+        Item item = _player.Inventory.GetItem(slotIndex);
+        if (item == null)
+        {
+            Console.Clear();
+            Console.WriteLine("그 슬롯은 비어있다.");
+            Console.WriteLine("[Enter] 계속");
+            Console.ReadLine();
+            return true;
+        }
+
+        // 성수/십자가는 '자동 소모' 컨셉이라, 실수로 낭비하지 않게 단축키 사용을 막는다.
+        if (item is HolyWater || item is Cross)
+        {
+            Console.Clear();
+            Console.WriteLine(item + " 는(은) 위기 상황에서 자동으로 소모되는 보호 아이템이다.");
+            Console.WriteLine("(단축키로 직접 사용할 수 없다)");
+            Console.WriteLine("[Enter] 계속");
+            Console.ReadLine();
+            return true;
+        }
+
+        bool used = _player.Inventory.UseAt(slotIndex);
+
+        Console.Clear();
+        if (used)
+            Console.WriteLine("아이템을 사용했다: " + item);
+        else
+            Console.WriteLine("지금은 사용할 수 없다.");
+
+        Console.WriteLine("[Enter] 계속");
+        Console.ReadLine();
+        return true;
     }
 
     private bool HandleInventoryKey()
@@ -109,6 +177,13 @@ public class TownScene : Scene
 
         // 새 타일에 플레이어 배치
         _field[newY, newX].OnTileObject = _player;
+
+        // 이동 1회 = 스텝 1회
+        EventContext context = new EventContext(_player, _locationType);
+        _triggerService.OnStep(context);
+
+        if (_player.IsDead())
+            GameOver();
     }
 
     private void InteractAtPlayerPosition()
@@ -137,6 +212,47 @@ public class TownScene : Scene
                 Console.WriteLine("[Enter] 계속");
                 Console.ReadLine();
             }
+            return;
+        }
+
+        // 루팅 포인트(조사)
+        if (tile.IsLootSpot)
+        {
+            EventContext context = new EventContext(_player, _locationType);
+
+            Console.Clear();
+            Console.WriteLine("주변을 조사한다...");
+            Console.WriteLine();
+
+            LootResult loot = LootSystem.RollLoot(context);
+            if (!loot.FoundSomething)
+            {
+                Console.WriteLine("아무것도 찾지 못했다.");
+            }
+            else
+            {
+                bool added = _player.Inventory.TryAdd(loot.Item);
+                if (added)
+                {
+                    Console.WriteLine("무언가를 얻었다: " + loot.Item);
+
+                    // 일회성 루팅 포인트(원하면 나중에 재생성/쿨다운으로 확장)
+                    tile.IsLootSpot = false;
+                }
+                else
+                {
+                    Console.WriteLine("가방이 가득 찼다. 아무것도 챙기지 못했다.");
+                }
+            }
+
+            // 루팅 이벤트 체크(성물 수에 따라 확률 상승)
+            _triggerService.OnLootAttempt(context);
+
+            if (_player.IsDead())
+                GameOver();
+
+            Console.WriteLine("[Enter] 계속");
+            Console.ReadLine();
             return;
         }
 

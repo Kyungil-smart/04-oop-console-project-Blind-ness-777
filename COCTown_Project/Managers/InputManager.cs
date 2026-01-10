@@ -13,6 +13,22 @@ public static class InputManager
         ConsoleKey.RightArrow,
         ConsoleKey.Enter,
         ConsoleKey.B,
+
+        // 단축키(일반 아이템 1~6)
+        ConsoleKey.D1,
+        ConsoleKey.D2,
+        ConsoleKey.D3,
+        ConsoleKey.D4,
+        ConsoleKey.D5,
+        ConsoleKey.D6,
+
+        // 넘패드도 허용
+        ConsoleKey.NumPad1,
+        ConsoleKey.NumPad2,
+        ConsoleKey.NumPad3,
+        ConsoleKey.NumPad4,
+        ConsoleKey.NumPad5,
+        ConsoleKey.NumPad6,
     };
 
     public static void Poll()

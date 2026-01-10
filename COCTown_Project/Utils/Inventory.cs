@@ -4,10 +4,13 @@ using System.Collections.Generic;
 public class Inventory
 {
     private const int SlotCount = 6;
+    private const int HolyRelicSlotCount = 5;
     private Item[] _itemSlots = new Item[SlotCount];
 
+    private HolyRelicPiece[] _holyRelicSlots = new HolyRelicPiece[HolyRelicSlotCount];
+
     private List<Item> _keyItems = new List<Item>();
-    private List<Item> _relicItems = new List<Item>();
+
 
     public PlayerCharacter Owner { get; set; }
 
@@ -23,9 +26,23 @@ public class Inventory
         item.Inventory = this;
 
         // 열쇠만 별도 보관
-        if (IsKeyItem(item))
+        if (item.Category == ItemCategory.Key || IsKeyItem(item))
         {
             _keyItems.Add(item);
+            return true;
+        }
+
+        // ✅ 퀘스트용 성물(5개 모으는 것)은 별도 슬롯
+        if (item.Category == ItemCategory.HolyRelic)
+        {
+            HolyRelicPiece relic = item as HolyRelicPiece;
+            if (relic == null) return false;
+
+            int emptyRelicIndex = FindEmptyHolyRelicSlotIndex();
+            if (emptyRelicIndex == -1)
+                return false;
+
+            _holyRelicSlots[emptyRelicIndex] = relic;
             return true;
         }
 
@@ -33,11 +50,6 @@ public class Inventory
         if (emptySlotIndex != -1)
         {
             _itemSlots[emptySlotIndex] = item;
-
-            // 성물은 추적용 리스트에도 같이 넣음
-            if (IsRelicItem(item))
-                _relicItems.Add(item);
-
             return true;
         }
 
@@ -151,8 +163,8 @@ public class Inventory
         Console.WriteLine("│  " + PadRightTo(JoinNames(_keyItems), 36) + "│");
 
         Console.WriteLine("├────────────────────────────────────────┤");
-        Console.WriteLine("│ [성물]                                 │");
-        Console.WriteLine("│  " + PadRightTo(JoinNames(_relicItems), 36) + "│");
+        Console.WriteLine("│ [성물(정화용) 5칸]                      │");
+        Console.WriteLine("│  " + PadRightTo(JoinHolyRelicNames(), 36) + "│");
 
         Console.WriteLine("└────────────────────────────────────────┘");
         Console.WriteLine("          [Enter] 닫기");
@@ -191,7 +203,7 @@ public class Inventory
         {
             Item item = _itemSlots[i];
 
-            if (item != null && !IsRelicItem(item)) // 성물은 제외
+            if (item != null && IsSwappable(item)) // 보호 아이템/성물은 제외
             {
                 swappable.Add(i);
                 Console.WriteLine((i + 1) + ". " + item);
@@ -213,9 +225,6 @@ public class Inventory
         int index = ReadSlotIndex(swappable);
 
         _itemSlots[index] = newItem;
-        if (IsRelicItem(newItem))
-            _relicItems.Add(newItem);
-
         return true;
     }
 
@@ -243,35 +252,71 @@ public class Inventory
         return name.Contains("열쇠") || name.Contains("키");
     }
 
-    private bool IsRelicItem(Item item)
+    private bool IsSwappable(Item item)
     {
         if (item == null) return false;
 
-        // ✅ 타입으로 성물 분류
-        return item is HolyWater || item is Cross;
+        // 일반 아이템만 교체 가능
+        return item.Category == ItemCategory.Normal;
+    }
+
+    public int GetHolyRelicCount()
+    {
+        int count = 0;
+        for (int i = 0; i < HolyRelicSlotCount; i++)
+        {
+            if (_holyRelicSlots[i] != null) count++;
+        }
+        return count;
     }
 
     public bool TryConsumeHolyWater()
     {
-        return TryRemoveFirstRelicByType(typeof(HolyWater));
+        return TryConsumeFromItemSlots(typeof(HolyWater));
     }
 
     public bool TryConsumeCross()
     {
-        return TryRemoveFirstRelicByType(typeof(Cross));
+        return TryConsumeFromItemSlots(typeof(Cross));
     }
 
-    private bool TryRemoveFirstRelicByType(Type targetType)
+    private bool TryConsumeFromItemSlots(Type targetType)
     {
-        for (int i = 0; i < _relicItems.Count; i++)
+        for (int i = 0; i < SlotCount; i++)
         {
-            Item item = _relicItems[i];
+            Item item = _itemSlots[i];
             if (item != null && item.GetType() == targetType)
             {
-                _relicItems.RemoveAt(i);
+                _itemSlots[i] = null;
                 return true;
             }
         }
         return false;
+    }
+
+    private int FindEmptyHolyRelicSlotIndex()
+    {
+        for (int i = 0; i < HolyRelicSlotCount; i++)
+        {
+            if (_holyRelicSlots[i] == null)
+                return i;
+        }
+        return -1;
+    }
+
+    private string JoinHolyRelicNames()
+    {
+        int count = GetHolyRelicCount();
+        if (count == 0) return "(없음)";
+
+        string result = "";
+        for (int i = 0; i < HolyRelicSlotCount; i++)
+        {
+            if (_holyRelicSlots[i] == null) continue;
+
+            if (result.Length > 0) result += ", ";
+            result += _holyRelicSlots[i].ToString();
+        }
+        return result;
     }
 }

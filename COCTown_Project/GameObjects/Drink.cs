@@ -10,6 +10,7 @@ public class Drink : Item
         Name = name;
         Description = description;
         _recoverAmount = recoverAmount;
+        Category = ItemCategory.Normal;
     }
 
     public override void Use()

@@ -6,7 +6,8 @@ public class Cross : Item
     {
         Id = id;
         Name = name;
-        description = description;
+        Description = description;
+        Category = ItemCategory.Protection;
     }
 
     public override void Use()
