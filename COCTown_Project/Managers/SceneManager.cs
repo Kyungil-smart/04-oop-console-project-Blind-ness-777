@@ -10,6 +10,14 @@ public static class SceneManager
 
     private static Dictionary<string, Scene> _scenes = new Dictionary<string, Scene>();
 
+    // 다음 씬 입장 시 스폰 기준 심볼(예: '+', 'S', 'U', 'D')
+    public static char NextSpawnSymbol = '\0';
+
+    public static void SetNextSpawnSymbol(char symbol)
+    {
+        NextSpawnSymbol = symbol;
+    }
+
     public static void AddScene(string key, Scene scene)
     {
         if (_scenes.ContainsKey(key)) return;
@@ -55,6 +63,8 @@ public static class SceneManager
 
     public static void Render()
     {
+        Console.Clear();
+
         if (Current != null)
             Current.Render();
     }

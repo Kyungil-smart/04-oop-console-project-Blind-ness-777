@@ -56,6 +56,25 @@ public class Inventory
         return SwapWhenFull(item);
     }
 
+	// 열쇠/키 아이템 보유 여부(이름에 포함된 문자열로 단순 판정)
+	public bool HasKeyNameContains(string keyword)
+	{
+		if (string.IsNullOrEmpty(keyword))
+			return false;
+
+		for (int i = 0; i < _keyItems.Count; i++)
+		{
+			Item item = _keyItems[i];
+			if (item == null) continue;
+
+			string name = item.ToString();
+			if (!string.IsNullOrEmpty(name) && name.Contains(keyword))
+				return true;
+		}
+
+		return false;
+	}
+
     public Item GetItem(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= SlotCount) return null;
@@ -243,8 +262,6 @@ public class Inventory
         }
     }
 
-    // ✅ 임시 판별(지금 Item에 타입이 없으니 이름 기반)
-    // 나중에 ItemType이 생기면 여기만 갈아끼우면 됨.
     private bool IsKeyItem(Item item)
     {
         if (item == null) return false;

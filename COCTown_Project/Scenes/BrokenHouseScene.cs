@@ -38,7 +38,7 @@ public class BrokenHouseScene : Scene
 		string[] map =
 		{
 			"#########################",
-			"#.?...#....?......#..?..#",
+			"#.....#....?......#..?..#",
 			"#.###.#.#####.###.#.###.#",
 			"#.#...#..?..#...#.#...#.#",
 			"#.#.#######.###.#.###.#.#",
@@ -66,31 +66,24 @@ public class BrokenHouseScene : Scene
 					_field[y, x].SpecialSymbol = '+';
 					_field[y, x].IsBlocked = false;
 				}
+				else if (c == '?')
+				{
+					_field[y, x].IsLootSpot = true;
+					_field[y, x].IsBlocked = false;
+				}
 				else
 				{
 					_field[y, x].IsBlocked = false;
 				}
 			}
 		}
-
-		// 루팅 포인트(부서진 집은 밀도가 높다)
-		_field[1, 2].IsLootSpot = true;
-        _field[1, 11].IsLootSpot = true;
-        _field[1, 21].IsLootSpot = true;
-        _field[3, 9].IsLootSpot = true;
-        _field[5, 6].IsLootSpot = true;
-        _field[5, 13].IsLootSpot = true;
-        _field[7, 13].IsLootSpot = true;
-        _field[9, 21].IsLootSpot = true;
-        _field[11, 2].IsLootSpot = true;
-        _field[11, 14].IsLootSpot = true;
-    }
+	}
 
 	public override void Enter()
 	{
 		_player.Field = _field;
-		// 출구 근처에서 시작
-		_player.Position = new Vector(2, 1);
+		// 출구(+)에서 시작
+		_player.Position = FindSymbolPosition('+', fallback: new Vector(1, 1));
 		_field[_player.Position.Y, _player.Position.X].OnTileObject = _player;
 
 		// 적 1마리 스폰(멀리)
@@ -188,6 +181,8 @@ public class BrokenHouseScene : Scene
 		int newY = _player.Position.Y + dy;
 		if (newX < 0 || newX >= _field.GetLength(1)) return;
 		if (newY < 0 || newY >= _field.GetLength(0)) return;
+		if (_field[newY, newX].IsBlocked) return;
+		if (_field[newY, newX].IsBlocked) return;
 
 		_field[_player.Position.Y, _player.Position.X].OnTileObject = null;
 		_player.Position = new Vector(newX, newY);
@@ -197,6 +192,19 @@ public class BrokenHouseScene : Scene
 		UpdateEnemies();
 
 		if (_player.IsDead()) GameOver();
+	}
+
+	private Vector FindSymbolPosition(char symbol, Vector fallback)
+	{
+		for (int y = 0; y < _field.GetLength(0); y++)
+		{
+			for (int x = 0; x < _field.GetLength(1); x++)
+			{
+				if (_field[y, x].SpecialSymbol == symbol)
+					return new Vector(x, y);
+			}
+		}
+		return fallback;
 	}
 
 	private void Interact()
@@ -256,9 +264,10 @@ public class BrokenHouseScene : Scene
 
 	public override void Render()
 	{
-		Console.SetCursorPosition(0, 0);
+		int uiTopOffsetY = 2;
+		Console.SetCursorPosition(0, uiTopOffsetY);
 		PrintField();
-		int hotkeyY = Console.WindowHeight - 2;
+		int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
 		_hotKeyBar.Render(0, hotkeyY);
 		_player.DrawSanityGauge();
 	}
@@ -385,6 +394,32 @@ public class BrokenHouseScene : Scene
 		Vector next = new Vector(from.X + stepX, from.Y + stepY);
 		if (next.X < 0 || next.X >= _field.GetLength(1)) return from;
 		if (next.Y < 0 || next.Y >= _field.GetLength(0)) return from;
+		if (_field[next.Y, next.X].IsBlocked)
+		{
+			// 1차 후보가 벽이면 다른 축으로 한 번 더 시도한다.
+			Vector alt;
+			if (stepX != 0)
+			{
+				int altStepY = 0;
+				if (dy > 0) altStepY = 1;
+				else if (dy < 0) altStepY = -1;
+				alt = new Vector(from.X, from.Y + altStepY);
+			}
+			else
+			{
+				int altStepX = 0;
+				if (dx > 0) altStepX = 1;
+				else if (dx < 0) altStepX = -1;
+				alt = new Vector(from.X + altStepX, from.Y);
+			}
+
+			if (alt.X >= 0 && alt.X < _field.GetLength(1) && alt.Y >= 0 && alt.Y < _field.GetLength(0))
+			{
+				if (!_field[alt.Y, alt.X].IsBlocked)
+					return alt;
+			}
+			return from;
+		}
 		return next;
 	}
 

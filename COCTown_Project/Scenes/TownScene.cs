@@ -6,56 +6,12 @@ public class TownScene : Scene
     private PlayerCharacter _player;
     private HotKeyBar _hotKeyBar;
 
-    // 1) 글자 규칙:
-    //    - '#': 벽(통과 불가)
-    //    - '.': 바닥(이동 가능)
-    //    - '+': 문(통과 가능 + Enter 상호작용, DoorTargetScene은 아래 주석 참고)
-    //    - '?': 루팅 후보(= IsLootSpot = true)
-    //    - 'S': 플레이어 시작 위치(스폰)
-    //    - 'E': 정문/엔딩 포인트(연출상 바깥 외벽에 두는 것을 추천)
-    //
-    // ⚠️ 주의
-    // - TownTemplate는 반드시 _field 크기(세로 25, 가로 60)와 같은 크기여야 한다.
-    // - 이 파일에서는 "타이틀 메뉴의 조작법 화면" 및 "조작 안내 문구"는 건드리지 않는다.
-    // =============================================================
-
-    // true면 타운을 "직접 찍은 템플릿"으로 로드한다.
-    // false면 기존 PlaceBuilding 자동 배치를 사용한다(권장하지 않음).
-    private const bool USE_MANUAL_TOWN_TEMPLATE = true;
-
-    // 직접 찍을 수 있는 타운 템플릿(25줄, 각 줄 60글자)
-    // 현재는 '뼈대'만 제공한다. 너가 townmap.png를 보고 여기 내용을 직접 완성하면 된다.
-    private static readonly string[] TownTemplate =
-    {
-        "############################################################",
-        "#?..#.......#?......#.?.##########........................?#",
-        "#...#...#...#...#...#...####C#####...##################....#",
-        "#.......#...#...#...#...##########...########1#########....#",
-        "#####...#...#...#.......####+#####...##################....#",
-        "#.......#...#...#...#...#......?.....########+#########....#",
-        "#...#####...#...#...#...#..................................#",
-        "#*..#?..........#.?.#......................................#",
-        "#########################...............###############....#",
-        "#.......................................###############....#",
-        "#..................################.....#######2#######....#",
-        "#..................################.....###############....#",
-        "#..########?.......#######H########?....#######+#######....#",
-        "#..########........################........................#",
-        "#..########........#######+########........................#",
-        "#..########................................................#",
-        "#..###B###+.............................#######+#######....#",
-        "#..########.............................###############....#",
-        "#..########....######+########..........###############....#",
-        "#..########....###############..........#######3#######....#",
-        "#..########....######4########..........###############....#",
-        "#...?..........###############..........###############....#",
-        "#..............###############.............................#",
-        "#.................................S........................#",
-        "##################################E#########################",
-    };
-
     private TriggerService _triggerService;
     private LocationType _locationType = LocationType.Town;
+
+    // 스폰(S) 좌표: 맵 해석 결과 (맵 문자열은 수정하지 않음)
+    private bool _hasSpawnInTemplate;
+    private Vector _spawnPosition;
 
     // ===== 추격(혼합 모드): 적 X, 흔적 : =====
     private System.Collections.Generic.List<Vector> _chaseEnemies = new System.Collections.Generic.List<Vector>();
@@ -70,12 +26,6 @@ public class TownScene : Scene
     private bool _hasReturnPosition;
     private Vector _returnPosition;
     private bool _spawnedOnce;
-
-    // 템플릿에서 읽은 스폰/정문 위치(없으면 기본값)
-    private int _spawnX = 1;
-    private int _spawnY = 1;
-    private int _exitX = 46;
-    private int _exitY = 20;
 
     public TownScene(PlayerCharacter player) => Init(player);
 
@@ -97,221 +47,140 @@ public class TownScene : Scene
         }
 
 		// ===== 타운 맵 초기 배치(레트로 ASCII) =====
-		// === 템플릿을 직접 찍어서 타운을 고정 레이아웃으로 유지 ===
-		if (USE_MANUAL_TOWN_TEMPLATE)
-		{
-			LoadTownFromTemplate(TownTemplate);
-			// 문(+)은 템플릿에서 '표시'만 한다.
-			// 실제로 어느 씬으로 들어가는지는 여기에서 좌표로 연결한다.
-			ConfigureTownDoors_ManualTemplate();
-		}
-		else
-		{
-			// 바깥 테두리는 벽으로 막아서 맵 밖으로 못 나가게 한다.
-			for (int y = 0; y < _field.GetLength(0); y++)
-			{
-				for (int x = 0; x < _field.GetLength(1); x++)
-				{
-					if (y == 0 || y == _field.GetLength(0) - 1 || x == 0 || x == _field.GetLength(1) - 1)
-						_field[y, x].IsBlocked = true;
-				}
-			}
-
-			// 테스트용: 바닥 아이템 1개
-			_field[4, 6].ItemOnTile = new Drink(10, "수상한 탄산음료", "마시면 머리가 맑아지는 느낌이다.", 2);
-
-			// ✅ '포켓몬 마을' 느낌: 건물은 덩어리(#)로 그리고, 문(+) 딱 1칸만 열린다.
-			// 부서진 집(하이리스크)
-			PlaceBuilding(leftX: 6, topY: 6, width: 9, height: 6, doorX: 10, doorY: 11, doorTargetScene: "BrokenHouse");
-
-			// 일반 집들(내부 구현)
-			PlaceBuilding(leftX: 22, topY: 5, width: 8, height: 5, doorX: 25, doorY: 9, doorTargetScene: "House1");
-			PlaceBuilding(leftX: 34, topY: 5, width: 8, height: 5, doorX: 37, doorY: 9, doorTargetScene: "House2");
-			PlaceBuilding(leftX: 22, topY: 12, width: 8, height: 5, doorX: 25, doorY: 16, doorTargetScene: "House3");
-			PlaceBuilding(leftX: 34, topY: 12, width: 8, height: 5, doorX: 37, doorY: 16, doorTargetScene: "House4");
-
-			// 성당(틀만)
-			PlaceBuilding(leftX: 42, topY: 2, width: 12, height: 7, doorX: 48, doorY: 8, doorTargetScene: "Church");
-
-			// 2층 집(촌장집/마을회관 느낌, 틀만)
-			PlaceBuilding(leftX: 42, topY: 11, width: 12, height: 7, doorX: 48, doorY: 17, doorTargetScene: "TownHall");
-
-			// ✅ 마을 정문(엔딩)
-			_field[20, 46].SpecialSymbol = 'E';
-
-			// ✅ 마을 루팅 포인트(임의 배치)
-			_field[14, 18].IsLootSpot = true;
-			_field[15, 27].IsLootSpot = true;
-			_field[17, 40].IsLootSpot = true;
-			_field[10, 50].IsLootSpot = true;
-			_field[19, 10].IsLootSpot = true;
-			_field[7, 15].IsLootSpot = true;
-			_field[18, 33].IsLootSpot = true;
-		}
-
-		// ✅ B안: 성물 4개를 "시작 시점에" 루팅 포인트 4곳에만 배정한다(셔플).
-		RelicPlacementSystem.InitializeIfNeeded(GetAllLootSpotPositions(), 4);
+		// 타운 맵은 문자열 템플릿으로만 초기화한다.
+		// - 실행 중에 건물/문/루팅 위치를 자동 생성하거나 보정하지 않는다.
+		// - 수정이 필요하면 아래 템플릿(문자 배열)만 수정한다.
+		BuildTownFromTemplate();
     }
 
-	// =============================================================
-	// 템플릿 로더
-	// =============================================================
-	private void LoadTownFromTemplate(string[] template)
+	private void BuildTownFromTemplate()
 	{
-		int height = _field.GetLength(0);
-		int width = _field.GetLength(1);
+        _hasSpawnInTemplate = false;
+        _spawnPosition = new Vector(0, 0);
 
-		// 1) 기본 바닥(.)으로 초기화
-		for (int y = 0; y < height; y++)
+        string[] template = new string[]
 		{
-			for (int x = 0; x < width; x++)
-			{
-				_field[y, x].IsBlocked = false;
-				_field[y, x].IsLootSpot = false;
-				_field[y, x].SpecialSymbol = '\0';
-				_field[y, x].DoorTargetScene = null;
-			}
-		}
+            "############################################################",
+            "#R..#.......#?......#.?.##########........................?#",
+            "#...#...#...#...#...#...####C#####...##################....#",
+            "#.......#...#...#...#...##########...########1#########....#",
+            "#####...#...#...#.......####+#####...##################....#",
+            "#.......#...#...#...#...#......?.....########+#########....#",
+            "#...#####...#...#...#...#..................................#",
+            "#*..#?..........#.?.#......................................#",
+            "#########################...............###############....#",
+            "#.......................................###############....#",
+            "#..................################.....#######2#######....#",
+            "#..................################.....###############....#",
+            "#..########?.......#######H########?....#######+#######....#",
+            "#..########........################........................#",
+            "#..########........#######+########........................#",
+            "#..########................................................#",
+            "#..###B###+.............................#######+#######....#",
+            "#..########.............................###############....#",
+            "#..########....######+########..........###############....#",
+            "#..########....###############..........#######3#######....#",
+            "#..########....######4########..........###############....#",
+            "#...?..........###############..........###############....#",
+            "#..............###############.............................#",
+            "#.................................S........................#",
+            "##################################E#########################",
+        };
 
-		// 2) 크기 검사(틀리면 최소한의 보호)
-		if (template == null || template.Length != height)
+		for (int y = 0; y < _field.GetLength(0); y++)
 		{
-			// 템플릿이 잘못됐으면 기존 기본값(테두리 벽)만 적용
-			for (int y = 0; y < height; y++)
+			for (int x = 0; x < _field.GetLength(1); x++)
 			{
-				for (int x = 0; x < width; x++)
-				{
-					if (y == 0 || y == height - 1 || x == 0 || x == width - 1)
-						_field[y, x].IsBlocked = true;
-				}
-			}
-			_spawnX = 1;
-			_spawnY = 1;
-			return;
-		}
+				Tile tile = _field[y, x];
+				tile.IsBlocked = false;
+				tile.IsLootSpot = false;
+				tile.SpecialSymbol = '\0';
+				tile.DoorTargetScene = null;
+				tile.ItemOnTile = null;
 
-		for (int y = 0; y < height; y++)
-		{
-			string line = template[y];
-			if (line == null || line.Length != width)
-				continue;
-
-			for (int x = 0; x < width; x++)
-			{
-				char ch = line[x];
-
-				if (ch == '#')
+				char c = template[y][x];
+				if (c == '#')
 				{
-					_field[y, x].IsBlocked = true;
-				}
-				else if (ch == '+')
-				{
-					_field[y, x].IsBlocked = false;
-					_field[y, x].SpecialSymbol = '+';
-				}
-				else if (ch == '?')
-				{
-					_field[y, x].IsBlocked = false;
-					_field[y, x].IsLootSpot = true;
-				}
-				else if (ch == 'S')
-				{
-					_field[y, x].IsBlocked = false;
-					_spawnX = x;
-					_spawnY = y;
-				}
-				else if (ch == 'E')
-				{
-					_field[y, x].IsBlocked = false;
-					_exitX = x;
-					_exitY = y;
-					_field[y, x].SpecialSymbol = 'E';
-				}
-				else
-				{
-					// 그 외 문자는 바닥(.) 취급
-					_field[y, x].IsBlocked = false;
-				}
-			}
-		}
-	}
-
-	// =============================================================
-	// [직접 찍는 타운 템플릿] 문(+) -> 씬 연결
-	//
-	// TownTemplate에서 +를 찍어둔 좌표에, 어떤 씬으로 들어갈지 지정하는 곳.
-	// 너는 다음 턴에 "타운을 직접 찍고 최신 ZIP"을 줄 거라고 했으니,
-	// 그 때 + 좌표가 확정되면 이 메서드의 (y,x) 좌표만 바꾸면 된다.
-	//
-	// ⚠️ 주의: _field는 [y,x] 순서다.
-	//
-	// 문 대상 씬 이름(문자열)은 기존 구조를 유지한다:
-	// - "BrokenHouse" / "House1"~"House4" / "Church" / "TownHall"
-	// =============================================================
-	private void ConfigureTownDoors_ManualTemplate()
-	{
-		// 아래 좌표는 '예시'다. (현재는 기본값)
-		// 너가 TownTemplate를 완성하고 난 뒤, 실제 + 좌표로 바꿔서 고정해라.
-		//
-		// 예) 부서진 집 문
-		// SetDoorTarget(doorX: 10, doorY: 11, targetScene: "BrokenHouse");
-		//
-		// 예) 일반 집 4채
-		// SetDoorTarget(doorX: 25, doorY: 9,  targetScene: "House1");
-		// SetDoorTarget(doorX: 37, doorY: 9,  targetScene: "House2");
-		// SetDoorTarget(doorX: 25, doorY: 16, targetScene: "House3");
-		// SetDoorTarget(doorX: 37, doorY: 16, targetScene: "House4");
-		//
-		// 예) 성당 / 촌장집(마을회관)
-		// SetDoorTarget(doorX: 48, doorY: 8,  targetScene: "Church");
-		// SetDoorTarget(doorX: 48, doorY: 17, targetScene: "TownHall");
-	}
-
-	private void SetDoorTarget(int doorX, int doorY, string targetScene)
-	{
-		if (doorY < 0 || doorY >= _field.GetLength(0) || doorX < 0 || doorX >= _field.GetLength(1))
-			return;
-
-		// 템플릿에 +를 안 찍었더라도, 안전하게 문으로 만들어준다.
-		_field[doorY, doorX].IsBlocked = false;
-		_field[doorY, doorX].SpecialSymbol = '+';
-		_field[doorY, doorX].DoorTargetScene = targetScene;
-	}
-
-	// 건물 외형을 타운 맵에 그린다.
-	// - 건물은 전부 벽(#) 판정
-	// - 문(+) 딱 1칸만 이동 가능 + Enter 상호작용
-	private void PlaceBuilding(int leftX, int topY, int width, int height, int doorX, int doorY, string doorTargetScene)
-	{
-		for (int y = topY; y < topY + height; y++)
-		{
-			for (int x = leftX; x < leftX + width; x++)
-			{
-				if (y < 0 || y >= _field.GetLength(0) || x < 0 || x >= _field.GetLength(1))
+					tile.IsBlocked = true;
 					continue;
+				}
 
-				if (x == doorX && y == doorY)
+				if (c == '?')				// 조사 포인트
 				{
-					_field[y, x].IsBlocked = false;
-					_field[y, x].SpecialSymbol = '+';
-					_field[y, x].DoorTargetScene = doorTargetScene;
+					tile.IsLootSpot = true;
+					continue;
 				}
-				else
+
+				if (c == '+')				// 문
 				{
-					_field[y, x].IsBlocked = true;
+					tile.SpecialSymbol = '+';
+					tile.IsBlocked = false;
+					continue;
 				}
-			}
-		}
-	}
+
+				if (c == 'E' || c == 'R')	// 특수 기호
+				{
+					tile.SpecialSymbol = c;
+					if (c == 'R')
+						tile.IsLootSpot = true;
+					continue;
+				}
+
+                if (c == 'S') // 스폰(맵 해석 기반)
+                {
+                    _hasSpawnInTemplate = true;
+                    _spawnPosition = new Vector(x, y);
+                    continue;
+                }
+            }
+        }
+
+        // 문(+) -> 씬 연결(고정)
+        // 문(+) -> 씬 연결 (좌표는 템플릿의 '+' 위치 그대로, 0-based)
+        SetDoorTarget(doorX: 10, doorY: 16, targetScene: "BrokenHouse");
+        SetDoorTarget(doorX: 45, doorY: 5, targetScene: "House1");
+        SetDoorTarget(doorX: 47, doorY: 12, targetScene: "House2");
+        SetDoorTarget(doorX: 47, doorY: 16, targetScene: "House3");
+        SetDoorTarget(doorX: 21, doorY: 18, targetScene: "House4");
+        SetDoorTarget(doorX: 28, doorY: 4, targetScene: "Church");
+        SetDoorTarget(doorX: 26, doorY: 14, targetScene: "TownHall");
+    }
+
+    private void SetDoorTarget(int doorX, int doorY, string targetScene)
+    {
+        if (doorY < 0 || doorY >= _field.GetLength(0) || doorX < 0 || doorX >= _field.GetLength(1))
+            return;
+
+        Tile tile = _field[doorY, doorX];
+
+        // 맵에 찍힌 '+'만 문으로 인정 (주입 금지)
+        if (tile.SpecialSymbol != '+')
+            return;
+
+        tile.DoorTargetScene = targetScene;
+    }
 
     public override void Enter()
     {
         _player.Field = _field;
 
-        // 처음 들어올 때만 템플릿의 'S' 위치에서 시작(없으면 기본 1,1)
+        // 처음 들어올 때만: 맵 템플릿의 S 좌표에서 시작
         if (!_spawnedOnce)
         {
-            _player.Position = new Vector(_spawnX, _spawnY);
+            if (_hasSpawnInTemplate)
+            {
+                _player.Position = _spawnPosition;
+            }
+            else
+            {
+                // S가 없으면 맵 자산 문제이므로, 조용히 (1,1)로 보내지 않는다.
+                Console.Clear();
+                Console.WriteLine("오류: 타운 맵 템플릿에서 스폰 'S'를 찾지 못했다.");
+                Console.WriteLine("[Enter] 계속");
+                Console.ReadLine();
+                _player.Position = new Vector(1, 1); // 여기마저도 싫으면, 게임 종료 처리로 바꾸면 됨
+            }
+
             _spawnedOnce = true;
         }
         else if (_hasReturnPosition)
@@ -319,6 +188,7 @@ public class TownScene : Scene
             _player.Position = _returnPosition;
             _hasReturnPosition = false;
         }
+
         _field[_player.Position.Y, _player.Position.X].OnTileObject = _player;
     }
 
@@ -484,8 +354,20 @@ public class TownScene : Scene
 			// 문 타일이면: DoorTargetScene으로 이동(씬이 없으면 문구)
 			if (!string.IsNullOrEmpty(tile.DoorTargetScene))
 			{
-				_returnPosition = _player.Position;
-				_hasReturnPosition = true;
+				// 잠긴 집(House4) : 열쇠가 없으면 진입 불가
+				if (tile.DoorTargetScene == "House4" && !_player.Inventory.HasKeyNameContains("낡은 집 열쇠"))
+				{
+					Console.Clear();
+					Console.WriteLine("문이 잠겨 있다.");
+					Console.WriteLine("열쇠가 필요하다.");
+					Console.WriteLine("[Enter] 계속");
+					Console.ReadLine();
+					return;
+				}
+
+                _returnPosition = FindReturnPositionNearDoor(_player.Position);
+
+                _hasReturnPosition = true;
 
 				Console.Clear();
 				if (tile.DoorTargetScene == "BrokenHouse")
@@ -499,8 +381,10 @@ public class TownScene : Scene
 				Console.WriteLine("[Enter] 계속");
 				Console.ReadLine();
 
-				SceneManager.Change(tile.DoorTargetScene);
-				return;
+                SceneManager.SetNextSpawnSymbol('+');
+                SceneManager.Change(tile.DoorTargetScene);
+
+                return;
 			}
 
 			Console.Clear();
@@ -567,36 +451,31 @@ public class TownScene : Scene
             Console.WriteLine("주변을 조사한다...");
             Console.WriteLine();
 
-            // ✅ B안: 이 루팅 포인트가 성물 배정 지점이라면, 무조건 성물을 준다.
-            if (RelicPlacementSystem.HasRelicAt(pos))
-            {
-                Item relic = new HolyRelicPiece(100, "파편 성물", "정화에 필요한 성물 조각이다.");
+			// 고정 성물(R) : 랜덤 배치를 쓰지 않고, 특정 좌표에서만 확정으로 준다.
+			if (tile.SpecialSymbol == 'R')
+			{
+				Item relic = new HolyRelicPiece(100, "파편 성물", "정화에 필요한 성물 조각이다.");
 
-                bool addedRelic = _player.Inventory.TryAdd(relic);
-                if (addedRelic)
-                {
-                    Console.WriteLine("무언가를 발견했다: " + relic);
+				bool addedRelic = _player.Inventory.TryAdd(relic);
+				if (addedRelic)
+				{
+					Console.WriteLine("무언가를 발견했다: " + relic);
+					tile.IsLootSpot = false;
+					tile.SpecialSymbol = '\0';
 
-                    RelicPlacementSystem.MarkRelicCollected(pos);
+					_triggerService.OnLootAttempt(context);
+					Console.WriteLine();
+					Console.WriteLine("[Enter] 계속");
+					Console.ReadLine();
+					return;
+				}
 
-                    // 성물은 1회성(그 지점에서 더는 안 나옴)
-                    tile.IsLootSpot = false;
-
-                    // 루팅 시 이벤트 체크
-                    _triggerService.OnLootAttempt(context);
-
-                    Console.WriteLine();
-                    Console.WriteLine("[Enter] 계속");
-                    Console.ReadLine();
-                    return;
-                }
-
-                Console.WriteLine("가방이 가득 찼다. 성물을 챙기지 못했다.");
-                Console.WriteLine();
-                Console.WriteLine("[Enter] 계속");
-                Console.ReadLine();
-                return;
-            }
+				Console.WriteLine("가방이 가득 찼다. 성물을 챙기지 못했다.");
+				Console.WriteLine();
+				Console.WriteLine("[Enter] 계속");
+				Console.ReadLine();
+				return;
+			}
 
 	        LootResult loot = LootSystem.RollLoot(context);
 	        if (!loot.FoundSomething)
@@ -638,17 +517,14 @@ public class TownScene : Scene
 
     public override void Render()
     {
-        // 0번째 줄: 정신력 UI
-        _player.DrawSanityGauge();
+		int uiTopOffsetY = 2;
+		Console.SetCursorPosition(0, uiTopOffsetY);
+		PrintField();
 
-        // 1번째 줄부터: 맵 출력
-        Console.SetCursorPosition(0, 1);
-        PrintField();
+		int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
+		_hotKeyBar.Render(0, hotkeyY);
 
-        int hotkeyY = Console.WindowHeight - 2;
-        _hotKeyBar.Render(0, hotkeyY);
-
-        // (정신력 UI는 이미 위에서 출력함)
+		_player.DrawSanityGauge();
     }
 
     public override void Exit()
@@ -731,20 +607,7 @@ public class TownScene : Scene
         // 성물(정화용) 5개를 모은 순간부터 추격 시작
         if (_player.Inventory.GetHolyRelicCount() >= 5)
         {
-            if (!_barrierRemoved)
-            {
-                _barrierRemoved = true;
-
-                Console.Clear();
-                Console.WriteLine("성물 5개가 모두 모였다.");
-                Console.WriteLine();
-                Console.WriteLine("마을을 감싸던 결계가… 흔들린다.");
-                Console.WriteLine("정문이 열릴지도 모른다.");
-                Console.WriteLine();
-                Console.WriteLine("[Enter] 계속");
-                Console.ReadLine();
-            }
-
+            // 성물 조건만 만족하면 추격은 시작됨 (엔딩은 아직)
             StartClimaxChase(enemyCount: 3);
         }
     }
@@ -900,5 +763,36 @@ public class TownScene : Scene
         if (next.Y < 0 || next.Y >= _field.GetLength(0)) return from;
 
         return next;
+    }
+
+    private Vector FindReturnPositionNearDoor(Vector doorPos)
+    {
+        // 문 옆으로 복귀시키기 위한 후보들(우선순위는 원하는 대로 바꿔도 됨)
+        Vector[] candidates = new Vector[]
+        {
+        new Vector(doorPos.X, doorPos.Y + 1),
+        new Vector(doorPos.X, doorPos.Y - 1),
+        new Vector(doorPos.X - 1, doorPos.Y),
+        new Vector(doorPos.X + 1, doorPos.Y)
+        };
+
+        for (int i = 0; i < candidates.Length; i++)
+        {
+            Vector p = candidates[i];
+
+            if (p.X < 0 || p.X >= _field.GetLength(1)) continue;
+            if (p.Y < 0 || p.Y >= _field.GetLength(0)) continue;
+
+            Tile t = _field[p.Y, p.X];
+            if (t.IsBlocked) continue;
+
+            // 문(+) 위나 정문(E) 위로 복귀하는 것 방지
+            if (t.SpecialSymbol == '+' || t.SpecialSymbol == 'E') continue;
+
+            return p;
+        }
+
+        // 주변에 안전한 바닥이 없으면 어쩔 수 없이 원래 위치 반환
+        return doorPos;
     }
 }

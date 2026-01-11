@@ -41,8 +41,6 @@ public class GameManager
 
         PlayerCharacter player = new PlayerCharacter();
 
-        // 필요하면 시작 아이템 테스트로 하나 넣기(선택)
-        // player.AddItem(new EnergyDrink(...));  // 너 Item 구조 완성 후에
         SceneManager.AddScene("Title", new TitleScene());
         SceneManager.AddScene("Story", new StoryScene());
         SceneManager.AddScene("Town", new TownScene(player));
@@ -54,7 +52,9 @@ public class GameManager
 		SceneManager.AddScene("House3", new House3Scene(player));
 		SceneManager.AddScene("House4", new House4Scene(player));
 		SceneManager.AddScene("Church", new ChurchScene(player));
+		SceneManager.AddScene("ChurchBasement", new ChurchBasementScene(player));
 		SceneManager.AddScene("TownHall", new TownHallScene(player));
+		SceneManager.AddScene("TownHall2F", new TownHall2FScene(player));
 
         // 첫 씬 시작
         SceneManager.Change("Title");

@@ -7,7 +7,7 @@ public class House1Scene : IndoorSceneBase
 		BuildFromStrings(new string[]
 		{
 			"###############",
-			"#..?...#......#",
+			"#..R...#......#",
 			"#......##..?...#",
 			"#.......#......#",
 			"#..#######.....#",

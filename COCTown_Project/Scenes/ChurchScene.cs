@@ -9,51 +9,44 @@ public class ChurchScene : IndoorSceneBase
 		// 'S' : 지하로 내려가는 문(아직 잠김)
 		BuildFromStrings(new string[]
 		{
-			"####################",
-			"#..................#",
-			"#......######......#",
-			"#......#....#......#",
-			"#......#..F.#......#",
-			"#......#....#......#",
-			"#......######......#",
-			"#..................#",
-			"#.........S........#",
-            "#..................#",
-			"##########+#########"
+			"#####################",
+			"#S.................R#",
+            "#........#T#........#",
+            "#...................#",
+            "#?.######...######..#",
+            "#...................#",
+            "#..######...######..#",
+			"#...................#",
+            "#..######...######.?#",
+            "#...................#",
+			"##########+##########"
 		});
 	}
 
 	protected override void OnSpecialInteract(char symbol)
 	{
-		if (symbol == 'F')
-		{
-			Console.Clear();
-			Console.WriteLine("성수대 앞에 섰다.");
-			Console.WriteLine();
-			if (_player.Inventory.GetHolyRelicCount() < 5)
-			{
-				Console.WriteLine("(아직은 부족하다... 성물 5개가 필요하다)");
-			}
-			else
-			{
-				Console.WriteLine("성물 5개가 모였다.\n여기서 무언가를 할 수 있을 것 같다...(미구현)");
-			}
-			Console.WriteLine();
-			Console.WriteLine("[Enter] 계속");
-			while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-			return;
-		}
-
 		if (symbol == 'S')
 		{
 			Console.Clear();
-			Console.WriteLine("지하로 내려가는 문이다.");
-			Console.WriteLine("지금은 열리지 않는다...(미구현)");
+			Console.WriteLine("지하로 내려간다...");
 			Console.WriteLine("[Enter] 계속");
 			while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-			return;
+
+            SceneManager.SetNextSpawnSymbol('S'); // 지하 맵의 S 위로 스폰
+            SceneManager.Change("ChurchBasement");
+
+            return;
 		}
 
-		base.OnSpecialInteract(symbol);
+        if (symbol == 'T')
+        {
+            Console.Clear();
+            Console.WriteLine("이 마을은 오염되었다......");
+            Console.WriteLine("당장 도망....... 전능하신... 신이시여.....");
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+            return;
+        }
+
+        base.OnSpecialInteract(symbol);
 	}
 }
