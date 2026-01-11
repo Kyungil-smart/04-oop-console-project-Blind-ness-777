@@ -30,14 +30,22 @@ public class ChurchBasementScene : IndoorSceneBase
             Console.Clear();
             Console.WriteLine("성수대 앞에 섰다.");
             Console.WriteLine();
+
             if (_player.Inventory.GetHolyRelicCount() < 5)
             {
                 Console.WriteLine("(아직은 부족하다... 성물 5개가 필요하다)");
             }
             else
             {
-                Console.WriteLine("성물 5개가 모였다.\n여기서 무언가를 할 수 있을 것 같다...(미구현)");
+                Console.WriteLine("성물들이 성수대 위에서 희미하게 빛난다...");
+                Console.WriteLine("정화 의식이 시작된다.");
+                Console.WriteLine();
+                Console.WriteLine("멀리서 무언가 부서지는 소리가 들린다...");
+                Console.WriteLine("마을을 감싸던 결계가 사라졌다.");
+
+                TownScene.NotifyBarrierRemoved();
             }
+
             Console.WriteLine();
             Console.WriteLine("[Enter] 계속");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }

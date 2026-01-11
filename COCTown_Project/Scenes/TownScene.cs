@@ -27,6 +27,8 @@ public class TownScene : Scene
     private Vector _returnPosition;
     private bool _spawnedOnce;
 
+    private static bool _globalBarrierRemoved;
+
     public TownScene(PlayerCharacter player) => Init(player);
 
     public void Init(PlayerCharacter player)
@@ -125,39 +127,18 @@ public class TownScene : Scene
 						tile.IsLootSpot = true;
 					continue;
 				}
-
-                if (c == 'S') // 스폰(맵 해석 기반)
-                {
-                    _hasSpawnInTemplate = true;
-                    _spawnPosition = new Vector(x, y);
-                    continue;
-                }
             }
         }
+        _hasSpawnInTemplate = SpawnResolver.TryFind(template, 'S', out _spawnPosition);
 
-        // 문(+) -> 씬 연결(고정)
-        // 문(+) -> 씬 연결 (좌표는 템플릿의 '+' 위치 그대로, 0-based)
-        SetDoorTarget(doorX: 10, doorY: 16, targetScene: "BrokenHouse");
-        SetDoorTarget(doorX: 45, doorY: 5, targetScene: "House1");
-        SetDoorTarget(doorX: 47, doorY: 12, targetScene: "House2");
-        SetDoorTarget(doorX: 47, doorY: 16, targetScene: "House3");
-        SetDoorTarget(doorX: 21, doorY: 18, targetScene: "House4");
-        SetDoorTarget(doorX: 28, doorY: 4, targetScene: "Church");
-        SetDoorTarget(doorX: 26, doorY: 14, targetScene: "TownHall");
-    }
+        DoorLinker.LinkDoor(_field, 10, 16, "BrokenHouse");
+        DoorLinker.LinkDoor(_field, 45, 5, "House1");
+        DoorLinker.LinkDoor(_field, 47, 12, "House2");
+        DoorLinker.LinkDoor(_field, 47, 16, "House3");
+        DoorLinker.LinkDoor(_field, 21, 18, "House4");
+        DoorLinker.LinkDoor(_field, 28, 4, "Church");
+        DoorLinker.LinkDoor(_field, 26, 14, "TownHall");
 
-    private void SetDoorTarget(int doorX, int doorY, string targetScene)
-    {
-        if (doorY < 0 || doorY >= _field.GetLength(0) || doorX < 0 || doorX >= _field.GetLength(1))
-            return;
-
-        Tile tile = _field[doorY, doorX];
-
-        // 맵에 찍힌 '+'만 문으로 인정 (주입 금지)
-        if (tile.SpecialSymbol != '+')
-            return;
-
-        tile.DoorTargetScene = targetScene;
     }
 
     public override void Enter()
@@ -381,7 +362,6 @@ public class TownScene : Scene
 				Console.WriteLine("[Enter] 계속");
 				Console.ReadLine();
 
-                SceneManager.SetNextSpawnSymbol('+');
                 SceneManager.Change(tile.DoorTargetScene);
 
                 return;
@@ -399,7 +379,7 @@ public class TownScene : Scene
 		{
 			Console.Clear();
 
-			if (!_barrierRemoved)
+			if (!_globalBarrierRemoved)
 			{
 				Console.WriteLine("정문은 결계에 막혀있다.");
 				Console.WriteLine("아직 나갈 수 없다...");
@@ -794,5 +774,10 @@ public class TownScene : Scene
 
         // 주변에 안전한 바닥이 없으면 어쩔 수 없이 원래 위치 반환
         return doorPos;
+    }
+
+    public static void NotifyBarrierRemoved()
+    {
+        _globalBarrierRemoved = true;
     }
 }

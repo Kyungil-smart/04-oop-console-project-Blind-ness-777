@@ -307,9 +307,7 @@ public abstract class IndoorSceneBase : Scene
 		if (added)
 		{
 			Console.WriteLine("무언가를 얻었다: " + fixedItem);
-			// 1회성: 다시는 조사하지 않도록 루팅을 제거한다.
 			tile.IsLootSpot = false;
-			// 표시도 제거해 깔끔하게 한다.
 			tile.SpecialSymbol = '\0';
 		}
 		else

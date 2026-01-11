@@ -4,8 +4,9 @@
     "\\GameObjects",
     "\\Managers",
     "\\Scenes",
-    "\\Utils"
+    "\\Utils",
+    "\\Utils\\Resolvers"
   ],
-  "SelectedNode": "\\Scenes\\TownScene.cs",
+  "SelectedNode": "\\Managers\\SceneManager.cs",
   "PreviewInSolutionExplorer": false
 }
