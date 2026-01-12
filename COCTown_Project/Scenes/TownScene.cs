@@ -18,10 +18,6 @@ public class TownScene : Scene
     private System.Collections.Generic.Dictionary<Vector, int> _enemyTrails = new System.Collections.Generic.Dictionary<Vector, int>();
     private bool _climaxChaseActive;
 
-    // 결계(엔딩 조건)
-    private bool _barrierRemoved;
-    private bool _barrierMessageShown;
-
     // 다른 씬(부서진 집 등) 다녀왔다가 돌아올 때 위치 보존
     private bool _hasReturnPosition;
     private Vector _returnPosition;
@@ -127,9 +123,15 @@ public class TownScene : Scene
 						tile.IsLootSpot = true;
 					continue;
 				}
+
+                if (c == 'S')
+                {
+                    _hasSpawnInTemplate = true;
+                    _spawnPosition = new Vector(x, y);
+                    continue;
+                }
             }
         }
-        _hasSpawnInTemplate = SpawnResolver.TryFind(template, 'S', out _spawnPosition);
 
         DoorLinker.LinkDoor(_field, 10, 16, "BrokenHouse");
         DoorLinker.LinkDoor(_field, 45, 5, "House1");
@@ -138,7 +140,6 @@ public class TownScene : Scene
         DoorLinker.LinkDoor(_field, 21, 18, "House4");
         DoorLinker.LinkDoor(_field, 28, 4, "Church");
         DoorLinker.LinkDoor(_field, 26, 14, "TownHall");
-
     }
 
     public override void Enter()
@@ -497,14 +498,24 @@ public class TownScene : Scene
 
     public override void Render()
     {
-		int uiTopOffsetY = 2;
-		Console.SetCursorPosition(0, uiTopOffsetY);
-		PrintField();
+        int uiTopOffsetY = 2;
 
-		int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
-		_hotKeyBar.Render(0, hotkeyY);
+        // 상단 2줄도 덮어써서 이전 텍스트 잔상 방지
+        Console.SetCursorPosition(0, 0);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, 1);
+        Console.Write(new string(' ', Console.WindowWidth));
 
-		_player.DrawSanityGauge();
+        Console.SetCursorPosition(0, uiTopOffsetY);
+        PrintField();
+
+        int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
+        _hotKeyBar.Render(0, hotkeyY);
+
+        _player.DrawSanityGauge();
+
+        int clearFromY = hotkeyY + 6; // 핫키바/게이지가 차지하는 줄 수 여유
+        SceneManager.ConsoleErase.ClearLinesFrom(clearFromY);
     }
 
     public override void Exit()
@@ -522,23 +533,6 @@ public class TownScene : Scene
         Console.ReadKey(true);
         Environment.Exit(0);
     }
-
-
-	private System.Collections.Generic.List<Vector> GetAllLootSpotPositions()
-	{
-		System.Collections.Generic.List<Vector> list = new System.Collections.Generic.List<Vector>();
-
-		for (int y = 0; y < _field.GetLength(0); y++)
-		{
-			for (int x = 0; x < _field.GetLength(1); x++)
-			{
-				if (_field[y, x].IsLootSpot)
-					list.Add(_field[y, x].Position);
-			}
-		}
-
-		return list;
-	}
 
     private void PrintField()
     {

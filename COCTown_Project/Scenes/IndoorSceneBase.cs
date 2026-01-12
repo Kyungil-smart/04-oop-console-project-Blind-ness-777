@@ -170,25 +170,34 @@ public abstract class IndoorSceneBase : Scene
 		return true;
 	}
 
-	public override void Render()
-	{
-		int uiTopOffsetY = 2;
-		Console.SetCursorPosition(0, uiTopOffsetY);
-		for (int y = 0; y < _field.GetLength(0); y++)
-		{
-			for (int x = 0; x < _field.GetLength(1); x++)	
-			{
-				_field[y, x].Print();
-			}
-			Console.WriteLine();
-		}
+    public override void Render()
+    {
+        int uiTopOffsetY = 2;
 
-		int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
-		_hotKeyBar.Render(0, hotkeyY);
-		_player.DrawSanityGauge();
-	}
+        Console.SetCursorPosition(0, 0);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, 1);
+        Console.Write(new string(' ', Console.WindowWidth));
 
-	public override void Exit()
+        Console.SetCursorPosition(0, uiTopOffsetY);
+        for (int y = 0; y < _field.GetLength(0); y++)
+        {
+            for (int x = 0; x < _field.GetLength(1); x++)
+            {
+                _field[y, x].Print();
+            }
+            Console.WriteLine();
+        }
+
+        int hotkeyY = uiTopOffsetY + _field.GetLength(0) + 2;
+        _hotKeyBar.Render(0, hotkeyY);
+        _player.DrawSanityGauge();
+
+        int clearFromY = hotkeyY + 6;
+        SceneManager.ConsoleErase.ClearLinesFrom(clearFromY);
+    }
+
+    public override void Exit()
 	{
 		_field[_player.Position.Y, _player.Position.X].OnTileObject = null;
 		_player.Field = null;
@@ -329,7 +338,7 @@ public abstract class IndoorSceneBase : Scene
 		while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
 	}
 
-    private void TrySetSpawnOnSymbol(char symbol)
+    protected void TrySetSpawnOnSymbol(char symbol)
     {
         for (int y = 0; y < _field.GetLength(0); y++)
         {

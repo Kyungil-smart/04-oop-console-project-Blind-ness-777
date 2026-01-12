@@ -17,9 +17,6 @@ public class TownHall2FScene : IndoorSceneBase
 			"#......................#",
 			"########################",
 		});
-
-		// 스폰 위치는 'D' 위치로 맞춘다.
-		TrySetSpawnOnSymbol('D');
 	}
 
 	protected override void OnSpecialInteract(char symbol)
@@ -47,20 +44,5 @@ public class TownHall2FScene : IndoorSceneBase
         }
 
 		base.OnSpecialInteract(symbol);
-	}
-
-	private void TrySetSpawnOnSymbol(char symbol)
-	{
-		for (int y = 0; y < _field.GetLength(0); y++)
-		{
-			for (int x = 0; x < _field.GetLength(1); x++)
-			{
-				if (_field[y, x].SpecialSymbol == symbol)
-				{
-					_spawn = new Vector(x, y);
-					return;
-				}
-			}
-		}
 	}
 }

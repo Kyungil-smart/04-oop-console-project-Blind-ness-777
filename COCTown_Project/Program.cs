@@ -10,6 +10,8 @@ namespace COCTown_Project
     {
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
+
             // 유니코드 문자(● 등) 출력 안정화
             Console.OutputEncoding = Encoding.UTF8;
             Console.Clear();
