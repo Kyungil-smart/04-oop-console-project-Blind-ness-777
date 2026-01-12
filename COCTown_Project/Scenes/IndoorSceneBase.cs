@@ -194,7 +194,7 @@ public abstract class IndoorSceneBase : Scene
         _player.DrawSanityGauge();
 
         int clearFromY = hotkeyY + 6;
-        SceneManager.ConsoleErase.ClearLinesFrom(clearFromY);
+        ConsoleErase.ClearLinesFrom(clearFromY);
     }
 
     public override void Exit()

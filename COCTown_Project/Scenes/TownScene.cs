@@ -515,7 +515,7 @@ public class TownScene : Scene
         _player.DrawSanityGauge();
 
         int clearFromY = hotkeyY + 6; // 핫키바/게이지가 차지하는 줄 수 여유
-        SceneManager.ConsoleErase.ClearLinesFrom(clearFromY);
+        ConsoleErase.ClearLinesFrom(clearFromY);
     }
 
     public override void Exit()
